@@ -30,8 +30,6 @@ public class ProgressController : MonoBehaviour
         startWidth = (int)rectTransform.rect.width;
 
         textMeshPro = textObject.GetComponent<TextMeshProUGUI>();
-
-        Debug.Log(textObject);
     }
 
     // Update is called once per frame
