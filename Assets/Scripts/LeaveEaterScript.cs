@@ -19,6 +19,7 @@ public class LeaveEaterScript : MonoBehaviour
             player.ProcessAbovegroundEnemyClick();
             timeDied = Time.time;
             alive = false;
+            player.numberOfAliveThreatsAboveGround--;
             GetComponent<MeshRenderer>().enabled = false;
         }
     }
@@ -37,6 +38,7 @@ public class LeaveEaterScript : MonoBehaviour
             if (Time.time > timeDied + respawnTimeSec)
             {
                 alive = true;
+                player.numberOfAliveThreatsAboveGround++;
                 GetComponent<MeshRenderer>().enabled = true;
             }
         }

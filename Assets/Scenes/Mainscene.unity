@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.14987513, g: 0.1685574, b: 0.17452255, a: 1}
+  m_IndirectSpecularColor: {r: 0.1498747, g: 0.16855672, b: 0.17452173, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -759,9 +759,13 @@ MonoBehaviour:
   sunHealthText: {fileID: 1304842819}
   waterHealthText: {fileID: 1368743852}
   seasonPassed: 0
-  seasonSpeed: 0.1
-  sunTreatSpeed: 0.1
-  waterTreatSpeed: 0.1
+  aboveGroundPercentageIncrease: 4
+  underGroundPercentageIncrease: 3
+  numberOfAliveThreatsAboveGround: 6
+  numberOfAliveThreatsUnderGround: 5
+  seasonSpeed: 0.05
+  sunTreatSpeed: 0.02
+  waterTreatSpeed: 0.02
 --- !u!4 &663232594
 Transform:
   m_ObjectHideFlags: 0
@@ -1278,7 +1282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: badb6ece71397624a9bc4452d77375c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeedKeyboard: 6
+  moveSpeedKeyboard: 15
   moveSpeedMouseScroll: 50
   rotationAngle: 10
 --- !u!4 &1038804385 stripped
@@ -1636,7 +1640,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1959,7 +1963,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

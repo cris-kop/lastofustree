@@ -12,7 +12,12 @@ public class GameplayLoop : MonoBehaviour
 
     private float seasonProgress = 0.0f;
     public bool seasonPassed;
-    
+
+    public float aboveGroundPercentageIncrease;
+    public float underGroundPercentageIncrease;
+    public int numberOfAliveThreatsAboveGround;
+    public int numberOfAliveThreatsUnderGround;
+
     private float sunHealth;
     private float waterHealth;
     private bool playerDied;
@@ -55,7 +60,7 @@ public class GameplayLoop : MonoBehaviour
             // Sun and water health decreasing over time (unless player takes action)
             if (sunHealth > 0.0f)
             {
-                sunHealth -= sunTreatSpeed;
+                sunHealth -= sunTreatSpeed * numberOfAliveThreatsAboveGround;
             }
             else
             {
@@ -64,7 +69,7 @@ public class GameplayLoop : MonoBehaviour
 
             if (waterHealth > 0.0f)
             {
-                waterHealth -= waterTreatSpeed;
+                waterHealth -= waterTreatSpeed * numberOfAliveThreatsUnderGround;
             }
             else
             {
@@ -98,7 +103,7 @@ public class GameplayLoop : MonoBehaviour
 
         if(playerDied)
         {
-            winText.text = "You killed the tree, shame on you!";
+            winText.text = "You killed the tree, shame on you.";
         }
     }
 
@@ -109,7 +114,7 @@ public class GameplayLoop : MonoBehaviour
         {
             if (waterHealth <= 100.0f)
             {
-                waterHealth += 2.0f;    // TODO: make variable
+                waterHealth += underGroundPercentageIncrease;    // TODO: make variable
             }
             Mathf.Clamp(waterHealth, waterHealth, 100.0f);
         }
@@ -122,7 +127,7 @@ public class GameplayLoop : MonoBehaviour
         {
             if (sunHealth <= 100.0f)
             {
-                sunHealth += 2.0f;    // TODO: make variable
+                sunHealth += aboveGroundPercentageIncrease;    // TODO: make variable
             }
             Mathf.Clamp(sunHealth, sunHealth, 100.0f);
         }

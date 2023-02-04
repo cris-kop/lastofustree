@@ -19,6 +19,7 @@ public class RootEaterScript : MonoBehaviour
             player.ProcessUndergroundEnemyClick();
             timeDied = Time.time;
             alive = false;
+            player.numberOfAliveThreatsUnderGround--;
             GetComponent<MeshRenderer>().enabled = false;
         }
     }
@@ -37,6 +38,7 @@ public class RootEaterScript : MonoBehaviour
             if (Time.time > timeDied + respawnTimeSec)
             {
                 alive = true;
+                player.numberOfAliveThreatsUnderGround++;
                 GetComponent<MeshRenderer>().enabled = true;
             }
         }
