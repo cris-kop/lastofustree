@@ -8,7 +8,7 @@ public class CameraController : MonoBehaviour
     public float moveSpeedMouseScroll;
     public float rotationAngle;
 
-    private float camMaxY = 16.0f;
+    public float camMaxY;
     private float camMinY = -6.5f;
     private float posYatZeroAngle;
 
