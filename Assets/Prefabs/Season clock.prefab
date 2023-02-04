@@ -197,6 +197,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e45bb208abba84bd98beb9f22e9c12eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seasonProgress: -0.96
+  seasonProgress: 0
   seasonId: 0
   seasonClockObject: {fileID: 3734882557548559395}

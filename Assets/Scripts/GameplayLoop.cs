@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class GameplayLoop : MonoBehaviour
 {
-    public Text seasonProgressText;
     public Text winText;
+    public SeasonClockController seasonClockController;
 
     public ProgressController sunProgressController;
     public ProgressController waterProgressController;
@@ -14,6 +14,7 @@ public class GameplayLoop : MonoBehaviour
     public Button restartButton;
 
     private float seasonProgress = 0.0f;
+    public int seasonId = 0;
     public bool seasonPassed;
 
     public float aboveGroundPercentageIncrease;
@@ -34,7 +35,6 @@ public class GameplayLoop : MonoBehaviour
     {
         restartButton.gameObject.SetActive(false);
 
-        seasonProgressText.text = "Season progress: 0%";
         winText.text = "";
         seasonPassed = false;
 
@@ -85,8 +85,8 @@ public class GameplayLoop : MonoBehaviour
     {
         // servived the season?
         if(!seasonPassed)
-        { 
-            seasonProgressText.text = "Season progress: " + ((int)seasonProgress) + "%";
+        {
+            seasonClockController.seasonProgress = seasonProgress;
         }
         
         if(seasonPassed) 
