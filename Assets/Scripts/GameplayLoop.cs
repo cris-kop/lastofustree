@@ -11,6 +11,8 @@ public class GameplayLoop : MonoBehaviour
     public ProgressController sunProgressController;
     public ProgressController waterProgressController;
 
+    public Button restartButton;
+
     private float seasonProgress = 0.0f;
     public bool seasonPassed;
 
@@ -30,6 +32,8 @@ public class GameplayLoop : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        restartButton.gameObject.SetActive(false);
+
         seasonProgressText.text = "Season progress: 0%";
         winText.text = "";
         seasonPassed = false;
@@ -88,6 +92,7 @@ public class GameplayLoop : MonoBehaviour
         if(seasonPassed) 
         {
             winText.text = "Season survived!\nWater left: " + (int)waterHealth + "\nSun left: " + (int)sunHealth;
+            restartButton.gameObject.SetActive(true);
         }
 
         // player died?
@@ -95,13 +100,12 @@ public class GameplayLoop : MonoBehaviour
         {
             sunProgressController.progress = (int)sunHealth;
             waterProgressController.progress = (int)waterHealth;
-
-
         }
 
         if (playerDied)
         {
             winText.text = "You killed the tree, shame on you.";
+            restartButton.gameObject.SetActive(true);
         }
     }
 
