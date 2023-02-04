@@ -7,8 +7,9 @@ public class GameplayLoop : MonoBehaviour
 {
     public Text seasonProgressText;
     public Text winText;
-    public Text sunHealthText;
-    public Text waterHealthText;
+
+    public ProgressController sunProgressController;
+    public ProgressController waterProgressController;
 
     private float seasonProgress = 0.0f;
     public bool seasonPassed;
@@ -37,9 +38,6 @@ public class GameplayLoop : MonoBehaviour
         sunHealth = 100.0f;
         waterHealth = 100.0f;
         playerDied = false;
-
-        sunHealthText.text = "Sun : 100%";
-        waterHealthText.text = "Water: 100%";
     }
 
     // Fixed update is at fixed times
@@ -95,13 +93,13 @@ public class GameplayLoop : MonoBehaviour
         // player died?
         if(!playerDied)
         {
-            sunHealthText.text = "Sun: " + ((int)sunHealth) + "%";
-            waterHealthText.text = "Water: " + ((int)waterHealth) + "%";
+            sunProgressController.progress = (int)sunHealth;
+            waterProgressController.progress = (int)waterHealth;
 
-            
+
         }
 
-        if(playerDied)
+        if (playerDied)
         {
             winText.text = "You killed the tree, shame on you.";
         }
