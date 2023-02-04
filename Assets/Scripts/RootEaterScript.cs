@@ -11,6 +11,8 @@ public class RootEaterScript : MonoBehaviour
 
     public float respawnTimeSec;
 
+    public AudioSource[] killSounds;
+
     // User clicked on the enemy
     void OnMouseDown()
     {
@@ -21,6 +23,7 @@ public class RootEaterScript : MonoBehaviour
             alive = false;
             player.numberOfAliveThreatsUnderGround--;
             GetComponent<MeshRenderer>().enabled = false;
+            killSounds[GetRandomNumberKillSound()].Play();
         }
     }
 
@@ -46,6 +49,12 @@ public class RootEaterScript : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
+    }
+
+    // get random number
+    int GetRandomNumberKillSound()
+    {
+        return Random.Range(0, killSounds.Length);
     }
 
     // Update is called once per frame

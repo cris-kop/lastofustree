@@ -30,6 +30,8 @@ public class GameplayLoop : MonoBehaviour
     public float sunTreatSpeed;
     public float waterTreatSpeed;
 
+    public AudioSource springBackgroundMusic;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,6 +44,9 @@ public class GameplayLoop : MonoBehaviour
         sunHealth = 100.0f;
         waterHealth = 100.0f;
         playerDied = false;
+
+        // start background music for Season 1: spring
+        springBackgroundMusic.Play();
     }
 
     // Fixed update is at fixed times

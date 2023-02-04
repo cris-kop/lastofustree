@@ -11,6 +11,11 @@ public class LeaveEaterScript : MonoBehaviour
 
     public float respawnTimeSec;
 
+    public AudioSource[] killSounds;
+    public AudioSource[] chewySounds;
+
+    private int playingChewySound;
+
     // User clicked on the enemy
     void OnMouseDown()
     {
@@ -21,9 +26,11 @@ public class LeaveEaterScript : MonoBehaviour
             alive = false;
             player.numberOfAliveThreatsAboveGround--;
             GetComponent<MeshRenderer>().enabled = false;
+            killSounds[GetRandomNumberKillSound()].Play();
+            chewySounds[playingChewySound].Stop();
         }
     }
-
+        
     // Start is called before the first frame update
     void Start()
     {
@@ -40,12 +47,27 @@ public class LeaveEaterScript : MonoBehaviour
                 alive = true;
                 player.numberOfAliveThreatsAboveGround++;
                 GetComponent<MeshRenderer>().enabled = true;
+                playingChewySound = GetRandomNumberChewySound();
+                chewySounds[playingChewySound].Play();
             }
         }
         if (player.seasonPassed)
         {
             gameObject.SetActive(false);
         }
+    }
+
+
+    // get random number
+    int GetRandomNumberKillSound()
+    {
+        return Random.Range(0, killSounds.Length);
+    }
+
+    // get random number
+    int GetRandomNumberChewySound()
+    {
+        return Random.Range(0, chewySounds.Length);
     }
 
     // Update is called once per frame

@@ -9,7 +9,7 @@ public class CameraController : MonoBehaviour
     public float rotationAngle;
 
     public float camMaxY;
-    private float camMinY = -6.5f;
+    public float camMinY;
     private float posYatZeroAngle;
 
     // Start is called before the first frame update
