@@ -11,8 +11,13 @@ public class GameplayLoop : MonoBehaviour
     public Text waterHealthText;
 
     private float seasonProgress = 0.0f;
-    private bool seasonPassed;
-    
+    public bool seasonPassed;
+
+    public float aboveGroundPercentageIncrease;
+    public float underGroundPercentageIncrease;
+    public int numberOfAliveThreatsAboveGround;
+    public int numberOfAliveThreatsUnderGround;
+
     private float sunHealth;
     private float waterHealth;
     private bool playerDied;
@@ -40,7 +45,7 @@ public class GameplayLoop : MonoBehaviour
     // Fixed update is at fixed times
     void FixedUpdate()
     {
-        if (!playerDied)
+        if (!playerDied && !seasonPassed)
         {
             // Season progression
             if (seasonProgress < 100.0f)
@@ -55,7 +60,7 @@ public class GameplayLoop : MonoBehaviour
             // Sun and water health decreasing over time (unless player takes action)
             if (sunHealth > 0.0f)
             {
-                sunHealth -= sunTreatSpeed;
+                sunHealth -= sunTreatSpeed * numberOfAliveThreatsAboveGround;
             }
             else
             {
@@ -64,7 +69,7 @@ public class GameplayLoop : MonoBehaviour
 
             if (waterHealth > 0.0f)
             {
-                waterHealth -= waterTreatSpeed;
+                waterHealth -= waterTreatSpeed * numberOfAliveThreatsUnderGround;
             }
             else
             {
@@ -73,19 +78,18 @@ public class GameplayLoop : MonoBehaviour
         }
     }
 
-
     // Update is called once per frame
     void Update()
     {
         // servived the season?
         if(!seasonPassed)
         { 
-            seasonProgressText.text = "Season progress: " + ((int)seasonProgress).ToString() + "%";
+            seasonProgressText.text = "Season progress: " + ((int)seasonProgress) + "%";
         }
         
         if(seasonPassed) 
         {
-            winText.text = "Season survived!";
+            winText.text = "Season survived!\nWater left: " + (int)waterHealth + "\nSun left: " + (int)sunHealth;
         }
 
         // player died?
@@ -93,11 +97,39 @@ public class GameplayLoop : MonoBehaviour
         {
             sunHealthText.text = "Sun: " + ((int)sunHealth) + "%";
             waterHealthText.text = "Water: " + ((int)waterHealth) + "%";
+
+            
         }
 
         if(playerDied)
         {
-            winText.text = "You killed the tree, shame on you!";
+            winText.text = "You killed the tree, shame on you.";
+        }
+    }
+
+    // process UNDERGROUND enemy clicks
+    public void ProcessUndergroundEnemyClick()
+    {
+        if (!seasonPassed)
+        {
+            if (waterHealth <= 100.0f)
+            {
+                waterHealth += underGroundPercentageIncrease;    // TODO: make variable
+            }
+            Mathf.Clamp(waterHealth, waterHealth, 100.0f);
+        }
+    }
+
+    // process ABOVEGROUND enemy clicks
+    public void ProcessAbovegroundEnemyClick()
+    {
+        if (!seasonPassed)
+        {
+            if (sunHealth <= 100.0f)
+            {
+                sunHealth += aboveGroundPercentageIncrease;    // TODO: make variable
+            }
+            Mathf.Clamp(sunHealth, sunHealth, 100.0f);
         }
     }
 }
