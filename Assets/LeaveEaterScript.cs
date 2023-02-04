@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyScript : MonoBehaviour
+public class LeaveEaterScript : MonoBehaviour
 {
     GameplayLoop player;
 
@@ -16,7 +16,7 @@ public class EnemyScript : MonoBehaviour
     {
         if (alive && !player.seasonPassed)
         {
-            player.ProcessEnemyClick();
+            player.ProcessAbovegroundEnemyClick();
             timeDied = Time.time;
             alive = false;
             GetComponent<MeshRenderer>().enabled = false;
@@ -28,7 +28,7 @@ public class EnemyScript : MonoBehaviour
     {
         player = GameObject.Find("Player").GetComponent<GameplayLoop>();
     }
-    
+
     // update at fixed timestep
     void FixedUpdate()
     {
@@ -40,7 +40,7 @@ public class EnemyScript : MonoBehaviour
                 GetComponent<MeshRenderer>().enabled = true;
             }
         }
-        if(player.seasonPassed)
+        if (player.seasonPassed)
         {
             gameObject.SetActive(false);
         }
@@ -49,6 +49,7 @@ public class EnemyScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
+

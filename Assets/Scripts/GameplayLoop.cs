@@ -53,14 +53,14 @@ public class GameplayLoop : MonoBehaviour
             }
 
             // Sun and water health decreasing over time (unless player takes action)
- /*           if (sunHealth > 0.0f)
+            if (sunHealth > 0.0f)
             {
                 sunHealth -= sunTreatSpeed;
             }
             else
             {
                 playerDied = true;
-            }*/
+            }
 
             if (waterHealth > 0.0f)
             {
@@ -102,8 +102,8 @@ public class GameplayLoop : MonoBehaviour
         }
     }
 
-    // process enemy clicks
-    public void ProcessEnemyClick()
+    // process UNDERGROUND enemy clicks
+    public void ProcessUndergroundEnemyClick()
     {
         if (!seasonPassed)
         {
@@ -112,6 +112,19 @@ public class GameplayLoop : MonoBehaviour
                 waterHealth += 2.0f;    // TODO: make variable
             }
             Mathf.Clamp(waterHealth, waterHealth, 100.0f);
+        }
+    }
+
+    // process ABOVEGROUND enemy clicks
+    public void ProcessAbovegroundEnemyClick()
+    {
+        if (!seasonPassed)
+        {
+            if (sunHealth <= 100.0f)
+            {
+                sunHealth += 2.0f;    // TODO: make variable
+            }
+            Mathf.Clamp(sunHealth, sunHealth, 100.0f);
         }
     }
 }
