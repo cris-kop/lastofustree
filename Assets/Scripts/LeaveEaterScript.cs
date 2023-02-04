@@ -14,7 +14,7 @@ public class LeaveEaterScript : MonoBehaviour
     // User clicked on the enemy
     void OnMouseDown()
     {
-        if (alive && !player.seasonPassed)
+        if (alive && !player.seasonPassed && !player.playerDied)
         {
             player.ProcessAbovegroundEnemyClick();
             timeDied = Time.time;
@@ -33,7 +33,7 @@ public class LeaveEaterScript : MonoBehaviour
     // update at fixed timestep
     void FixedUpdate()
     {
-        if (!alive)
+        if (!alive && !player.seasonPassed && !player.playerDied)
         {
             if (Time.time > timeDied + respawnTimeSec)
             {

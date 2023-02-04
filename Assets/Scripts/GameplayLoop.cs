@@ -23,7 +23,7 @@ public class GameplayLoop : MonoBehaviour
 
     private float sunHealth;
     private float waterHealth;
-    private bool playerDied;
+    public bool playerDied;
 
     public float seasonSpeed;
     public float sunTreatSpeed;
