@@ -40,7 +40,6 @@ public class CameraController : MonoBehaviour
             Vector3 camRot = GetComponent<Transform>().transform.eulerAngles;
             camRot.x = ((newPos.y - posYatZeroAngle) / (camMaxY - camMinY)) * (rotationAngle * 2.0f);
             GetComponent<Transform>().transform.eulerAngles = camRot;
-            Debug.Log("Cam rot X: " + camRot.x);
         }
     }
 }
