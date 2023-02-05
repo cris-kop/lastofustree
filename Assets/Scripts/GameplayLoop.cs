@@ -6,21 +6,21 @@ using UnityEngine.UI;
 public class GameplayLoop : MonoBehaviour
 {
     //public Camera primaryCamera;
-    
+
     public Text winText;
     public SeasonClockController seasonClockController;
 
     public ProgressController sunProgressController;
     public ProgressController waterProgressController;
 
-    public SpriteRenderer arrowUp;
-    public SpriteRenderer arrowDown;
-
     public Button restartButton;
 
     private float seasonProgress = 0.0f;
     public int currentSeasonId;               // 0 spring, 1 summer, 2 autumn, 3 winter
     public bool betweenSeasons;
+
+    public SpriteRenderer arrowUp;
+    public SpriteRenderer arrowDown;
 
     public float aboveGroundPercentageIncrease;
     public float underGroundPercentageIncrease;
@@ -66,7 +66,7 @@ public class GameplayLoop : MonoBehaviour
     // Fixed update is at fixed times
     void FixedUpdate()
     {
-        if(GameRunning())
+        if (GameRunning())
         {
             // Season progression
             if (seasonProgress < 100.0f)
@@ -97,6 +97,27 @@ public class GameplayLoop : MonoBehaviour
 
             sunProgressController.progress = (int)leafHealth;
             waterProgressController.progress = (int)rootHealth;
+
+            if (leafHealth < 30)
+            {
+                Debug.Log("low sun");
+                arrowUp.enabled = true;
+            }
+            else
+            {
+                Debug.Log("enough sun");
+                arrowUp.enabled = false;
+            }
+            if (rootHealth < 30)
+            {
+                Debug.Log("low water");
+                arrowDown.enabled = true;
+            }
+            else
+            {
+                Debug.Log("enough water");
+                arrowDown.enabled = false;
+            }
         }
     }
 
@@ -104,7 +125,7 @@ public class GameplayLoop : MonoBehaviour
     // process UNDERGROUND enemy clicks
     public void ProcessUndergroundEnemyClick()
     {
-        if(GameRunning())
+        if (GameRunning())
         {
             if (rootHealth <= 100.0f)
             {
@@ -166,16 +187,16 @@ public class GameplayLoop : MonoBehaviour
     }
 
     void StopCurrentSeason()
-    {     
+    {
         winSound.Play();
 
         betweenSeasons = true;
 
-        if(currentSeasonId == 3)
+        if (currentSeasonId == 3)
         {
             WinGame();
         }
-        else 
+        else
         {
             StartNextSeason();
         }
@@ -195,7 +216,7 @@ public class GameplayLoop : MonoBehaviour
         rootHealth += healthIncreaseAtSeasonSwitch;
 
         seasonClockController.seasonId += 1; // currentSeasonId;
-        
+
         betweenSeasons = false;
     }
 
@@ -243,7 +264,7 @@ public class GameplayLoop : MonoBehaviour
         }
         if (currentSeasonId == 1)
         {
-            for(int i=0;i<7;++i)
+            for (int i = 0; i < 7; ++i)
             {
                 backgroundPlanes[i].GetComponent<MeshRenderer>().material = summerMaterials[i];
             }
