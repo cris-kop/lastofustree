@@ -16,14 +16,17 @@ public class RootEaterScript : MonoBehaviour
     // User clicked on the enemy
     void OnMouseDown()
     {
-        if (alive && !player.seasonPassed && !player.playerDied)
+        if (player.cameraIntroDone)
         {
-            player.ProcessUndergroundEnemyClick();
-            timeDied = Time.time;
-            alive = false;
-            player.numberOfAliveThreatsUnderGround--;
-            GetComponent<MeshRenderer>().enabled = false;
-            killSounds[GetRandomNumberKillSound()].Play();
+            if (alive && !player.seasonPassed && !player.playerDied)
+            {
+                player.ProcessUndergroundEnemyClick();
+                timeDied = Time.time;
+                alive = false;
+                player.numberOfAliveThreatsUnderGround--;
+                GetComponent<MeshRenderer>().enabled = false;
+                killSounds[GetRandomNumberKillSound()].Play();
+            }
         }
     }
 
@@ -36,18 +39,21 @@ public class RootEaterScript : MonoBehaviour
     // update at fixed timestep
     void FixedUpdate()
     {
-        if (!alive && !player.seasonPassed && !player.playerDied)
+        if (player.cameraIntroDone)
         {
-            if (Time.time > timeDied + respawnTimeSec)
+            if (!alive && !player.seasonPassed && !player.playerDied)
             {
-                alive = true;
-                player.numberOfAliveThreatsUnderGround++;
-                GetComponent<MeshRenderer>().enabled = true;
+                if (Time.time > timeDied + respawnTimeSec)
+                {
+                    alive = true;
+                    player.numberOfAliveThreatsUnderGround++;
+                    GetComponent<MeshRenderer>().enabled = true;
+                }
             }
-        }
-        if(player.seasonPassed)
-        {
-            gameObject.SetActive(false);
+            if (player.seasonPassed)
+            {
+                gameObject.SetActive(false);
+            }
         }
     }
 

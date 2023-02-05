@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class GameplayLoop : MonoBehaviour
 {
+    public Camera primaryCamera;
+    
     public Text winText;
     public SeasonClockController seasonClockController;
 
@@ -34,6 +36,9 @@ public class GameplayLoop : MonoBehaviour
     public AudioSource winSound;
     public AudioSource dieSound;
 
+    // Intro mode
+    public bool cameraIntroDone;
+
 
     // Start is called before the first frame update
     void Start()
@@ -48,6 +53,9 @@ public class GameplayLoop : MonoBehaviour
         waterHealth = 100.0f;
         playerDied = false;
 
+        sunProgressController.progress = (int)sunHealth;
+        waterProgressController.progress = (int)waterHealth;
+
         // start background music for Season 1: spring
         springBackgroundMusic.Play();
     }
@@ -55,37 +63,40 @@ public class GameplayLoop : MonoBehaviour
     // Fixed update is at fixed times
     void FixedUpdate()
     {
-        if (!playerDied && !seasonPassed)
+        if (cameraIntroDone)
         {
-            // Season progression
-            if (seasonProgress < 100.0f)
+            if (!playerDied && !seasonPassed)
             {
-                seasonProgress += seasonSpeed;
-            }
-            else
-            {
-                seasonPassed = true;
-                springBackgroundMusic.Stop();
-                winSound.Play();
-            }
+                // Season progression
+                if (seasonProgress < 100.0f)
+                {
+                    seasonProgress += seasonSpeed;
+                }
+                else
+                {
+                    seasonPassed = true;
+                    springBackgroundMusic.Stop();
+                    winSound.Play();
+                }
 
-            // Sun and water health decreasing over time (unless player takes action)
-            if (sunHealth > 0.0f)
-            {
-                sunHealth -= sunTreatSpeed * numberOfAliveThreatsAboveGround;
-            }
-            else
-            {
-                PlayerDied();
-            }
+                // Sun and water health decreasing over time (unless player takes action)
+                if (sunHealth > 0.0f)
+                {
+                    sunHealth -= sunTreatSpeed * numberOfAliveThreatsAboveGround;
+                }
+                else
+                {
+                    PlayerDied();
+                }
 
-            if (waterHealth > 0.0f)
-            {
-                waterHealth -= waterTreatSpeed * numberOfAliveThreatsUnderGround;
-            }
-            else
-            {
-                PlayerDied();
+                if (waterHealth > 0.0f)
+                {
+                    waterHealth -= waterTreatSpeed * numberOfAliveThreatsUnderGround;
+                }
+                else
+                {
+                    PlayerDied();
+                }
             }
         }
     }
@@ -93,29 +104,32 @@ public class GameplayLoop : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // servived the season?
-        if(!seasonPassed)
+        if (cameraIntroDone)
         {
-            seasonClockController.seasonProgress = seasonProgress;
-        }
-        
-        if(seasonPassed) 
-        {
-            winText.text = "Season survived!\nWater left: " + (int)waterHealth + "\nSun left: " + (int)sunHealth;
-            restartButton.gameObject.SetActive(true);
-        }
+            // servived the season?
+            if (!seasonPassed)
+            {
+                seasonClockController.seasonProgress = seasonProgress;
+            }
 
-        // player died?
-        if(!playerDied)
-        {
-            sunProgressController.progress = (int)sunHealth;
-            waterProgressController.progress = (int)waterHealth;
-        }
+            if (seasonPassed)
+            {
+                winText.text = "Season survived!\nWater left: " + (int)waterHealth + "\nSun left: " + (int)sunHealth;
+                restartButton.gameObject.SetActive(true);
+            }
 
-        if (playerDied)
-        {
-            winText.text = "You didn't manage to save to three, shame on you.";
-            restartButton.gameObject.SetActive(true);
+            // player died?
+            if (!playerDied)
+            {
+                sunProgressController.progress = (int)sunHealth;
+                waterProgressController.progress = (int)waterHealth;
+            }
+
+            if (playerDied)
+            {
+                winText.text = "You didn't manage to save to three, shame on you.";
+                restartButton.gameObject.SetActive(true);
+            }
         }
     }
 

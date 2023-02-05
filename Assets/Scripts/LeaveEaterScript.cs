@@ -20,10 +20,13 @@ public class LeaveEaterScript : MonoBehaviour
     // User clicked on the enemy
     void OnMouseDown()
     {
-        Debug.Log("OnMouseDown for leave-eater!");
-        if (alive && !player.seasonPassed && !player.playerDied)
+        if (player.cameraIntroDone)
         {
-            SetDeadState();
+            Debug.Log("OnMouseDown for leave-eater!");
+            if (alive && !player.seasonPassed && !player.playerDied)
+            {
+                SetDeadState();
+            }
         }
     }
         
@@ -40,21 +43,24 @@ public class LeaveEaterScript : MonoBehaviour
     // update at fixed timestep
     void FixedUpdate()
     {
-        if (!alive && !player.seasonPassed && !player.playerDied)
+        if (player.cameraIntroDone)
         {
-            if (Time.time > timeDied + respawnTimeSec)
+            if (!alive && !player.seasonPassed && !player.playerDied)
             {
-                Respawn();
+                if (Time.time > timeDied + respawnTimeSec)
+                {
+                    Respawn();
+                }
             }
-        }
-        
-        if (player.seasonPassed && alive)
-        {
-            SetDeadState();
-        }
-        if(player.playerDied && alive)
-        {
-            SetDeadState();
+
+            if (player.seasonPassed && alive)
+            {
+                SetDeadState();
+            }
+            if (player.playerDied && alive)
+            {
+                SetDeadState();
+            }
         }
     }
 
