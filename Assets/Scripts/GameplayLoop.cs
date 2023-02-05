@@ -24,8 +24,8 @@ public class GameplayLoop : MonoBehaviour
     public int numberOfAliveThreatsAboveGround;
     public int numberOfAliveThreatsUnderGround;
 
-    private float sunHealth;
-    private float waterHealth;
+    private float leafHealth;
+    private float rootHealth;
     public bool playerDied;
 
     public float seasonSpeed;
@@ -61,8 +61,12 @@ public class GameplayLoop : MonoBehaviour
             }
             else
             {
-                StopCurrentSeason();
+                if (!betweenSeasons)
+                {
+                    StopCurrentSeason();
+                }
             }
+
             if (!betweenSeasons)
             {
                 ProcessThreats();
@@ -77,21 +81,22 @@ public class GameplayLoop : MonoBehaviour
         {
             UpdateSeasonClock();
 
-            sunProgressController.progress = (int)sunHealth;
-            waterProgressController.progress = (int)waterHealth;
+            sunProgressController.progress = (int)leafHealth;
+            waterProgressController.progress = (int)rootHealth;
         }
     }
+
 
     // process UNDERGROUND enemy clicks
     public void ProcessUndergroundEnemyClick()
     {
         if(GameRunning())
         {
-            if (waterHealth <= 100.0f)
+            if (rootHealth <= 100.0f)
             {
-                waterHealth += underGroundPercentageIncrease;    // TODO: make variable
+                rootHealth += underGroundPercentageIncrease;    // TODO: make variable
             }
-            Mathf.Clamp(waterHealth, waterHealth, 100.0f);
+            Mathf.Clamp(rootHealth, rootHealth, 100.0f);
         }
     }
 
@@ -100,11 +105,11 @@ public class GameplayLoop : MonoBehaviour
     {
         if (GameRunning())
         {
-            if (sunHealth <= 100.0f)
+            if (leafHealth <= 100.0f)
             {
-                sunHealth += aboveGroundPercentageIncrease;    // TODO: make variable
+                leafHealth += aboveGroundPercentageIncrease;    // TODO: make variable
             }
-            Mathf.Clamp(sunHealth, sunHealth, 100.0f);
+            Mathf.Clamp(leafHealth, leafHealth, 100.0f);
         }
     }
 
@@ -128,13 +133,13 @@ public class GameplayLoop : MonoBehaviour
         currentSeasonId = 0;
 
         seasonProgress = 0.0f;
-        sunHealth = 100.0f;
-        waterHealth = 100.0f;
+        leafHealth = 100.0f;
+        rootHealth = 100.0f;
         playerDied = false;
         betweenSeasons = false;
 
-        sunProgressController.progress = (int)sunHealth;
-        waterProgressController.progress = (int)waterHealth;
+        sunProgressController.progress = (int)leafHealth;
+        waterProgressController.progress = (int)rootHealth;
 
         // start background music for Season 1: spring
         springBackgroundMusic.Play();
@@ -146,39 +151,48 @@ public class GameplayLoop : MonoBehaviour
     }
 
     void StopCurrentSeason()
-    {
+    {     
         winSound.Play();
 
-        winText.text = "Season survived!\nWater left: " + (int)waterHealth + "\nSun left: " + (int)sunHealth;
+        //winText.text = "Season survived!\nWater left: " + (int)rootHealth + "\nSun left: " + (int)leafHealth;
         restartButton.gameObject.SetActive(true);
 
         betweenSeasons = true;
-
         StartNextSeason();
     }
 
     void StartNextSeason()
     {
+        Debug.Log("Next season started!");
+
         currentSeasonId += 1;
+        seasonProgress = 0;
+
         springBackgroundMusic.Stop();
+
+        leafHealth += healthIncreaseAtSeasonSwitch;
+        rootHealth += healthIncreaseAtSeasonSwitch;
+
+        seasonClockController.seasonId += 1; // currentSeasonId;
+        
         betweenSeasons = false;
     }
 
     void ProcessThreats()
     {
         // Sun and water health decreasing over time (unless player takes action)
-        if (sunHealth > 0.0f)
+        if (leafHealth > 0.0f)
         {
-            sunHealth -= sunTreatSpeed * numberOfAliveThreatsAboveGround;
+            leafHealth -= sunTreatSpeed * numberOfAliveThreatsAboveGround;
         }
         else
         {
             KillPlayer();
         }
 
-        if (waterHealth > 0.0f)
+        if (rootHealth > 0.0f)
         {
-            waterHealth -= waterTreatSpeed * numberOfAliveThreatsUnderGround;
+            rootHealth -= waterTreatSpeed * numberOfAliveThreatsUnderGround;
         }
         else
         {

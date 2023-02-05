@@ -2054,7 +2054,7 @@ MonoBehaviour:
   springBackgroundMusic: {fileID: 663232595}
   winSound: {fileID: 663232597}
   dieSound: {fileID: 663232596}
-  healthIncreaseAtSeasonSwitch: 50
+  healthIncreaseAtSeasonSwitch: 25
   cameraIntroDone: 0
 --- !u!4 &663232594
 Transform:
