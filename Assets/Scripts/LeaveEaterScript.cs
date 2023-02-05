@@ -20,6 +20,7 @@ public class LeaveEaterScript : MonoBehaviour
     // User clicked on the enemy
     void OnMouseDown()
     {
+        Debug.Log("OnMouseDown for leave-eater!");
         if (alive && !player.seasonPassed && !player.playerDied)
         {
             SetDeadState();
@@ -82,7 +83,7 @@ public class LeaveEaterScript : MonoBehaviour
         timeDied = Time.time;
         alive = false;
         player.numberOfAliveThreatsAboveGround--;
-        GetComponent<MeshRenderer>().enabled = false;
+        GetComponent<SpriteRenderer>().enabled = false;
     }
 
     // Sets all properties when a leave eater respawns
@@ -90,7 +91,7 @@ public class LeaveEaterScript : MonoBehaviour
     {
         alive = true;
         player.numberOfAliveThreatsAboveGround++;
-        GetComponent<MeshRenderer>().enabled = true;
+        GetComponent<SpriteRenderer>().enabled = true;
         randomChewySound = chewySounds[GetRandomNumberChewySound()];
         randomChewySound.Play();
 
