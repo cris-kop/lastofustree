@@ -5,12 +5,9 @@ using UnityEngine.UI;
 
 public class GameplayLoop : MonoBehaviour
 {
-    //public Camera primaryCamera;
-
     public Image DieImage;
     public Image WinImage;
 
-    //public Text winText;
     public SeasonClockController seasonClockController;
 
     public ProgressController sunProgressController;
@@ -161,7 +158,6 @@ public class GameplayLoop : MonoBehaviour
 
         DieImage.enabled = true;
 
-        //winText.text = "You didn't manage to save to three, shame on you.";
         restartButton.gameObject.SetActive(true);
 
         backgroundMusicArray[currentSeasonId].Stop();
@@ -175,7 +171,6 @@ public class GameplayLoop : MonoBehaviour
         DieImage.enabled = false;
         WinImage.enabled = false;
 
-        //winText.text = "";
         currentSeasonId = 0;
         ChangeSeasonBackgrounds();
 
@@ -297,7 +292,6 @@ public class GameplayLoop : MonoBehaviour
 
     void WinGame()
     {
-        //winText.text = "YOU ARE VICTORIOUS";
         WinImage.enabled = true;
         restartButton.gameObject.SetActive(true);
     }

@@ -20,6 +20,8 @@ public class CameraController : MonoBehaviour
 
     GameplayLoop player;
 
+    public GameObject countdown;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,7 +33,7 @@ public class CameraController : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    {       
         if (player.cameraIntroDone)
         {
             if (GetComponent<Transform>().transform.position.y <= camMaxY && GetComponent<Transform>().transform.position.y >= camMinY)
@@ -69,6 +71,11 @@ public class CameraController : MonoBehaviour
                     Vector3 movement = new Vector3(0.0f, introMoveSpeed, 0.0f);
                     Vector3 newPos = GetComponent<Transform>().transform.position += movement;
                     GetComponent<Transform>().transform.position = newPos;
+
+                    // countdown
+                    Vector3 countdownPos = countdown.GetComponent<Transform>().position;
+                    countdownPos.y = newPos.y + 2.5f;
+                    countdown.GetComponent<Transform>().position = countdownPos;
                 }
                 else
                 {
@@ -82,6 +89,11 @@ public class CameraController : MonoBehaviour
                     Vector3 movement = new Vector3(0.0f, -introMoveSpeed, 0.0f);
                     Vector3 newPos = GetComponent<Transform>().transform.position += movement;
                     GetComponent<Transform>().transform.position = newPos;
+
+                    // countdown
+                    Vector3 countdownPos = countdown.GetComponent<Transform>().position;
+                    countdownPos.y = newPos.y + 2.5f;
+                    countdown.GetComponent<Transform>().position = countdownPos;
                 }
                 else
                 {
@@ -96,10 +108,16 @@ public class CameraController : MonoBehaviour
                     Vector3 newPos = GetComponent<Transform>().transform.position += movement;
 
                     GetComponent<Transform>().transform.position = newPos;
+
+                    // countdown
+                    Vector3 countdownPos = countdown.GetComponent<Transform>().position;
+                    countdownPos.y = newPos.y + 2.5f;
+                    countdown.GetComponent<Transform>().position = countdownPos;
                 }
                 else
                 {
                     player.cameraIntroDone = true;
+                    //countdown.GetComponent<SpriteRenderer>().enabled = false;
                 }
             }
         }
