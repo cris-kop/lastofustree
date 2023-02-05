@@ -13,6 +13,9 @@ public class GameplayLoop : MonoBehaviour
     public ProgressController sunProgressController;
     public ProgressController waterProgressController;
 
+    public SpriteRenderer arrowUp;
+    public SpriteRenderer arrowDown;
+
     public Button restartButton;
 
     private float seasonProgress = 0.0f;
@@ -47,6 +50,8 @@ public class GameplayLoop : MonoBehaviour
     void Start()
     {
         StartNewGame();
+        arrowUp.enabled = false;
+        arrowDown.enabled = false;
     }
 
     // Fixed update is at fixed times
@@ -79,6 +84,25 @@ public class GameplayLoop : MonoBehaviour
 
             sunProgressController.progress = (int)sunHealth;
             waterProgressController.progress = (int)waterHealth;
+
+            if (sunHealth < 30)
+            {
+                Debug.Log("low sun");
+                arrowUp.enabled = true;
+            } else
+            {
+                Debug.Log("enough sun");
+                arrowUp.enabled = false;
+            }
+            if (waterHealth < 30)
+            {
+                Debug.Log("low water");
+                arrowDown.enabled = true;
+            } else
+            {
+                Debug.Log("enough water");
+                arrowDown.enabled = false;
+            }
         }
     }
 
