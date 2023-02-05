@@ -9,7 +9,7 @@ public class RootEaterScript : MonoBehaviour
     private bool enemyAlive = true;
     private float timeDied;
 
-    public float respawnTimeSec;
+    public float[] respawnTimeSec;
 
     public AudioSource[] killSounds;
 
@@ -38,7 +38,7 @@ public class RootEaterScript : MonoBehaviour
     {
         if(player.GameRunning() && !enemyAlive)
         {
-            if (Time.time > timeDied + respawnTimeSec)
+            if (Time.time > timeDied + respawnTimeSec[player.currentSeasonId])
             {
                 enemyAlive = true;
                 player.numberOfAliveThreatsUnderGround++;

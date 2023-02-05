@@ -9,7 +9,7 @@ public class LeaveEaterScript : MonoBehaviour
     private bool enemyAlive = true;
     private float timeDied;
 
-    public float respawnTimeSec;
+    public float[] respawnTimeSec;
 
     public AudioSource[] killSounds;
     private AudioSource randomKillSound;
@@ -42,7 +42,7 @@ public class LeaveEaterScript : MonoBehaviour
     {
         if(player.GameRunning() && !enemyAlive)
         { 
-            if (Time.time > timeDied + respawnTimeSec)
+            if (Time.time > timeDied + respawnTimeSec[player.currentSeasonId])
             {
                 Respawn();
             }

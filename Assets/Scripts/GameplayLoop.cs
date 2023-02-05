@@ -22,8 +22,9 @@ public class GameplayLoop : MonoBehaviour
     public SpriteRenderer arrowUp;
     public SpriteRenderer arrowDown;
 
-    public float aboveGroundPercentageIncrease;
-    public float underGroundPercentageIncrease;
+    public float[] aboveGroundPercentageIncrease;
+    public float[] underGroundPercentageIncrease;
+        
     public int numberOfAliveThreatsAboveGround;
     public int numberOfAliveThreatsUnderGround;
 
@@ -130,7 +131,7 @@ public class GameplayLoop : MonoBehaviour
         {
             if (rootHealth <= 100.0f)
             {
-                rootHealth += underGroundPercentageIncrease;    // TODO: make variable
+                rootHealth += underGroundPercentageIncrease[currentSeasonId];
             }
             Mathf.Clamp(rootHealth, rootHealth, 100.0f);
         }
@@ -143,7 +144,7 @@ public class GameplayLoop : MonoBehaviour
         {
             if (leafHealth <= 100.0f)
             {
-                leafHealth += aboveGroundPercentageIncrease;    // TODO: make variable
+                leafHealth += aboveGroundPercentageIncrease[currentSeasonId];
             }
             Mathf.Clamp(leafHealth, leafHealth, 100.0f);
         }

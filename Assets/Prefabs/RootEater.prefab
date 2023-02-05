@@ -51,7 +51,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d92267fcf051e864fb4facc13dfe9778, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  respawnTimeSec: 2
+  respawnTimeSec:
+  - 2
+  - 2
+  - 2
+  - 2
   killSounds:
   - {fileID: -1398979289787026927}
   - {fileID: 4007859414937661310}
