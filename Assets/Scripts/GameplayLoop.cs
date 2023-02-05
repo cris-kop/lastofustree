@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class GameplayLoop : MonoBehaviour
 {
+    public Camera mainCamera;
+    
     public Image DieImage;
     public Image WinImage;
 
@@ -53,9 +55,20 @@ public class GameplayLoop : MonoBehaviour
 
     public AudioSource[] backgroundMusicArray;
 
+    // season change text
+    public Image summerTextImage;
+    public Image autumnTextImage;
+    public Image winterTextImage;
+
     // Intro mode
     public bool cameraIntroDone;
 
+    public Image startPlayingText;
+
+    // I DIDN"T WRITE THIS CODE
+    float timeWhenTextAppeared;
+    private float showTextTime = 2.0f;
+    float timeWhenStartTextAppeared;
 
     // Start is called before the first frame update
     void Start()
@@ -63,6 +76,10 @@ public class GameplayLoop : MonoBehaviour
         StartNewGame();
         arrowUp.enabled = false;
         arrowDown.enabled = false;
+
+        summerTextImage.enabled = false;
+        autumnTextImage.enabled = false;
+        winterTextImage.enabled = false;
     }
 
     // Fixed update is at fixed times
@@ -88,6 +105,23 @@ public class GameplayLoop : MonoBehaviour
                 ProcessThreats();
             }
         }
+
+        // code I also didn't write
+        if(Time.time > timeWhenTextAppeared + showTextTime)
+        {
+            if(currentSeasonId == 1)
+            {
+                summerTextImage.enabled = false;
+            }
+            if (currentSeasonId == 2)
+            {
+                autumnTextImage.enabled = false;
+            }
+            if (currentSeasonId == 3)
+            {
+                winterTextImage.enabled = false;
+            }
+        }
     }
 
     // Update is called once per frame
@@ -102,27 +136,28 @@ public class GameplayLoop : MonoBehaviour
 
             if (leafHealth < 30)
             {
-                Debug.Log("low sun");
                 arrowUp.enabled = true;
             }
             else
             {
-                Debug.Log("enough sun");
                 arrowUp.enabled = false;
             }
             if (rootHealth < 30)
             {
-                Debug.Log("low water");
                 arrowDown.enabled = true;
             }
             else
             {
-                Debug.Log("enough water");
                 arrowDown.enabled = false;
             }
         }
-    }
 
+        // still didn't write this code
+        if (Time.time > timeWhenStartTextAppeared + 5.0f)
+        {
+            startPlayingText.enabled = false;
+        }
+    }
 
     // process UNDERGROUND enemy clicks
     public void ProcessUndergroundEnemyClick()
@@ -166,6 +201,8 @@ public class GameplayLoop : MonoBehaviour
 
     void StartNewGame()
     {
+        timeWhenStartTextAppeared = Time.time;
+        
         restartButton.gameObject.SetActive(false);
 
         DieImage.enabled = false;
@@ -221,6 +258,22 @@ public class GameplayLoop : MonoBehaviour
         rootHealth += healthIncreaseAtSeasonSwitch;
 
         seasonClockController.seasonId += 1; // currentSeasonId;
+
+
+        timeWhenTextAppeared = Time.time;
+
+        if(currentSeasonId == 1)
+        {
+            summerTextImage.enabled = true;
+        }
+        if (currentSeasonId == 2)
+        {
+            autumnTextImage.enabled = true;
+        }
+        if (currentSeasonId == 3)
+        {
+            winterTextImage.enabled = true;
+        }
 
         betweenSeasons = false;
     }
