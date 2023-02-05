@@ -27,20 +27,29 @@ public class GameplayLoop : MonoBehaviour
     public int numberOfAliveThreatsAboveGround;
     public int numberOfAliveThreatsUnderGround;
 
-    private float sunHealth;
-    private float waterHealth;
+    private float leafHealth;
+    private float rootHealth;
     public bool playerDied;
 
     public float seasonSpeed;
     public float sunTreatSpeed;
     public float waterTreatSpeed;
 
-    public AudioSource springBackgroundMusic;
     public AudioSource winSound;
     public AudioSource dieSound;
 
     // season related controls
     public int healthIncreaseAtSeasonSwitch;
+
+    public GameObject groundMesh;
+    public GameObject[] backgroundPlanes;
+
+    public Material[] springMaterials;
+    public Material[] summerMaterials;
+    public Material[] autumnMaterials;
+    public Material[] winterMaterials;
+
+    public AudioSource[] backgroundMusicArray;
 
     // Intro mode
     public bool cameraIntroDone;
@@ -66,8 +75,12 @@ public class GameplayLoop : MonoBehaviour
             }
             else
             {
-                StopCurrentSeason();
+                if (!betweenSeasons)
+                {
+                    StopCurrentSeason();
+                }
             }
+
             if (!betweenSeasons)
             {
                 ProcessThreats();
@@ -82,40 +95,22 @@ public class GameplayLoop : MonoBehaviour
         {
             UpdateSeasonClock();
 
-            sunProgressController.progress = (int)sunHealth;
-            waterProgressController.progress = (int)waterHealth;
-
-            if (sunHealth < 30)
-            {
-                Debug.Log("low sun");
-                arrowUp.enabled = true;
-            } else
-            {
-                Debug.Log("enough sun");
-                arrowUp.enabled = false;
-            }
-            if (waterHealth < 30)
-            {
-                Debug.Log("low water");
-                arrowDown.enabled = true;
-            } else
-            {
-                Debug.Log("enough water");
-                arrowDown.enabled = false;
-            }
+            sunProgressController.progress = (int)leafHealth;
+            waterProgressController.progress = (int)rootHealth;
         }
     }
+
 
     // process UNDERGROUND enemy clicks
     public void ProcessUndergroundEnemyClick()
     {
         if(GameRunning())
         {
-            if (waterHealth <= 100.0f)
+            if (rootHealth <= 100.0f)
             {
-                waterHealth += underGroundPercentageIncrease;    // TODO: make variable
+                rootHealth += underGroundPercentageIncrease;    // TODO: make variable
             }
-            Mathf.Clamp(waterHealth, waterHealth, 100.0f);
+            Mathf.Clamp(rootHealth, rootHealth, 100.0f);
         }
     }
 
@@ -124,11 +119,11 @@ public class GameplayLoop : MonoBehaviour
     {
         if (GameRunning())
         {
-            if (sunHealth <= 100.0f)
+            if (leafHealth <= 100.0f)
             {
-                sunHealth += aboveGroundPercentageIncrease;    // TODO: make variable
+                leafHealth += aboveGroundPercentageIncrease;    // TODO: make variable
             }
-            Mathf.Clamp(sunHealth, sunHealth, 100.0f);
+            Mathf.Clamp(leafHealth, leafHealth, 100.0f);
         }
     }
 
@@ -136,12 +131,13 @@ public class GameplayLoop : MonoBehaviour
     void KillPlayer()
     {
         playerDied = true;
-        springBackgroundMusic.Stop();
         dieSound.Play();
-        currentSeasonId = -1;
 
         winText.text = "You didn't manage to save to three, shame on you.";
         restartButton.gameObject.SetActive(true);
+
+        backgroundMusicArray[currentSeasonId].Stop();
+        currentSeasonId = -1;
     }
 
     void StartNewGame()
@@ -150,18 +146,18 @@ public class GameplayLoop : MonoBehaviour
 
         winText.text = "";
         currentSeasonId = 0;
+        ChangeSeasonBackgrounds();
 
         seasonProgress = 0.0f;
-        sunHealth = 100.0f;
-        waterHealth = 100.0f;
+        leafHealth = 100.0f;
+        rootHealth = 100.0f;
         playerDied = false;
         betweenSeasons = false;
 
-        sunProgressController.progress = (int)sunHealth;
-        waterProgressController.progress = (int)waterHealth;
+        sunProgressController.progress = (int)leafHealth;
+        waterProgressController.progress = (int)rootHealth;
 
-        // start background music for Season 1: spring
-        springBackgroundMusic.Play();
+        backgroundMusicArray[0].Play();
     }
 
     public bool GameRunning()
@@ -170,39 +166,54 @@ public class GameplayLoop : MonoBehaviour
     }
 
     void StopCurrentSeason()
-    {
+    {     
         winSound.Play();
-
-        winText.text = "Season survived!\nWater left: " + (int)waterHealth + "\nSun left: " + (int)sunHealth;
-        restartButton.gameObject.SetActive(true);
 
         betweenSeasons = true;
 
-        StartNextSeason();
+        if(currentSeasonId == 3)
+        {
+            WinGame();
+        }
+        else 
+        {
+            StartNextSeason();
+        }
     }
 
     void StartNextSeason()
     {
         currentSeasonId += 1;
-        springBackgroundMusic.Stop();
+        seasonProgress = 0;
+
+        ChangeSeasonMusic();
+        ChangeSeasonBackgrounds();
+
+        groundMesh.GetComponent<GroundController>().ChangeMaterial(currentSeasonId);
+
+        leafHealth += healthIncreaseAtSeasonSwitch;
+        rootHealth += healthIncreaseAtSeasonSwitch;
+
+        seasonClockController.seasonId += 1; // currentSeasonId;
+        
         betweenSeasons = false;
     }
 
     void ProcessThreats()
     {
         // Sun and water health decreasing over time (unless player takes action)
-        if (sunHealth > 0.0f)
+        if (leafHealth > 0.0f)
         {
-            sunHealth -= sunTreatSpeed * numberOfAliveThreatsAboveGround;
+            leafHealth -= sunTreatSpeed * numberOfAliveThreatsAboveGround;
         }
         else
         {
             KillPlayer();
         }
 
-        if (waterHealth > 0.0f)
+        if (rootHealth > 0.0f)
         {
-            waterHealth -= waterTreatSpeed * numberOfAliveThreatsUnderGround;
+            rootHealth -= waterTreatSpeed * numberOfAliveThreatsUnderGround;
         }
         else
         {
@@ -213,5 +224,49 @@ public class GameplayLoop : MonoBehaviour
     void UpdateSeasonClock()
     {
         seasonClockController.seasonProgress = seasonProgress;
+    }
+
+    void ChangeSeasonMusic()
+    {
+        backgroundMusicArray[currentSeasonId - 1].Stop();
+        backgroundMusicArray[currentSeasonId].Play();
+    }
+
+    void ChangeSeasonBackgrounds()
+    {
+        if (currentSeasonId == 0)
+        {
+            for (int i = 0; i < 7; ++i)
+            {
+                backgroundPlanes[i].GetComponent<MeshRenderer>().material = springMaterials[i];
+            }
+        }
+        if (currentSeasonId == 1)
+        {
+            for(int i=0;i<7;++i)
+            {
+                backgroundPlanes[i].GetComponent<MeshRenderer>().material = summerMaterials[i];
+            }
+        }
+        if (currentSeasonId == 2)
+        {
+            for (int i = 0; i < 7; ++i)
+            {
+                backgroundPlanes[i].GetComponent<MeshRenderer>().material = autumnMaterials[i];
+            }
+        }
+        if (currentSeasonId == 3)
+        {
+            for (int i = 0; i < 7; ++i)
+            {
+                backgroundPlanes[i].GetComponent<MeshRenderer>().material = winterMaterials[i];
+            }
+        }
+    }
+
+    void WinGame()
+    {
+        winText.text = "YOU ARE VICTORIOUS";
+        restartButton.gameObject.SetActive(true);
     }
 }
