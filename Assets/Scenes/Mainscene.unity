@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.17365262, g: 0.20867796, b: 0.2512908, a: 1}
+  m_IndirectSpecularColor: {r: 0.17365323, g: 0.20867875, b: 0.251292, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2206,12 +2206,24 @@ MonoBehaviour:
   numberOfAliveThreatsAboveGround: 6
   numberOfAliveThreatsUnderGround: 5
   playerDied: 0
-  seasonSpeed: 0.05
-  sunTreatSpeed: 0.02
-  waterTreatSpeed: 0.02
   winSound: {fileID: 663232597}
   dieSound: {fileID: 663232596}
-  healthIncreaseAtSeasonSwitch: 75
+  seasonSpeeds:
+  - 0.05
+  - 0.05
+  - 0.05
+  - 0.05
+  sunThreatSpeeds:
+  - 0.02
+  - 0.02
+  - 0.02
+  - 0.02
+  waterThreatSpeeds:
+  - 0.02
+  - 0.02
+  - 0.02
+  - 0.02
+  healthIncreaseAtSeasonSwitch: 20
   groundMesh: {fileID: 165385753}
   backgroundPlanes:
   - {fileID: 540590937}

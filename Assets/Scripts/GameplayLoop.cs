@@ -31,12 +31,13 @@ public class GameplayLoop : MonoBehaviour
     private float rootHealth;
     public bool playerDied;
 
-    public float seasonSpeed;
-    public float sunTreatSpeed;
-    public float waterTreatSpeed;
-
     public AudioSource winSound;
     public AudioSource dieSound;
+
+    // difficulty controls
+    public float[] seasonSpeeds;
+    public float[] sunThreatSpeeds;
+    public float[] waterThreatSpeeds;
 
     // season related controls
     public int healthIncreaseAtSeasonSwitch;
@@ -71,7 +72,7 @@ public class GameplayLoop : MonoBehaviour
             // Season progression
             if (seasonProgress < 100.0f)
             {
-                seasonProgress += seasonSpeed;
+                seasonProgress += seasonSpeeds[currentSeasonId];
             }
             else
             {
@@ -225,7 +226,7 @@ public class GameplayLoop : MonoBehaviour
         // Sun and water health decreasing over time (unless player takes action)
         if (leafHealth > 0.0f)
         {
-            leafHealth -= sunTreatSpeed * numberOfAliveThreatsAboveGround;
+            leafHealth -= sunThreatSpeeds[currentSeasonId] * numberOfAliveThreatsAboveGround;
         }
         else
         {
@@ -234,7 +235,7 @@ public class GameplayLoop : MonoBehaviour
 
         if (rootHealth > 0.0f)
         {
-            rootHealth -= waterTreatSpeed * numberOfAliveThreatsUnderGround;
+            rootHealth -= waterThreatSpeeds[currentSeasonId] * numberOfAliveThreatsUnderGround;
         }
         else
         {
