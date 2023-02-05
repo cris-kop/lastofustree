@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.17365262, g: 0.20867796, b: 0.2512908, a: 1}
+  m_IndirectSpecularColor: {r: 0.17365323, g: 0.20867875, b: 0.251292, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2036,14 +2036,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3089e7fb678adb45addbc3f41639299, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  primaryCamera: {fileID: 963194227}
   winText: {fileID: 1324993519}
   seasonClockController: {fileID: 321789912}
   sunProgressController: {fileID: 1587216482}
   waterProgressController: {fileID: 2018667372}
   restartButton: {fileID: 1322883240}
-  seasonId: 0
-  seasonPassed: 0
+  currentSeasonId: 0
+  betweenSeasons: 0
   aboveGroundPercentageIncrease: 4
   underGroundPercentageIncrease: 3
   numberOfAliveThreatsAboveGround: 6
@@ -2055,6 +2054,7 @@ MonoBehaviour:
   springBackgroundMusic: {fileID: 663232595}
   winSound: {fileID: 663232597}
   dieSound: {fileID: 663232596}
+  healthIncreaseAtSeasonSwitch: 50
   cameraIntroDone: 0
 --- !u!4 &663232594
 Transform:

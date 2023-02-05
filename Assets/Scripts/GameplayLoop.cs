@@ -36,6 +36,9 @@ public class GameplayLoop : MonoBehaviour
     public AudioSource winSound;
     public AudioSource dieSound;
 
+    // season related controls
+    public int healthIncreaseAtSeasonSwitch;
+
     // Intro mode
     public bool cameraIntroDone;
 
@@ -150,6 +153,8 @@ public class GameplayLoop : MonoBehaviour
         restartButton.gameObject.SetActive(true);
 
         betweenSeasons = true;
+
+        StartNextSeason();
     }
 
     void StartNextSeason()
