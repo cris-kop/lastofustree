@@ -32,12 +32,21 @@ public class GameplayLoop : MonoBehaviour
     public float sunTreatSpeed;
     public float waterTreatSpeed;
 
-    public AudioSource springBackgroundMusic;
     public AudioSource winSound;
     public AudioSource dieSound;
 
     // season related controls
     public int healthIncreaseAtSeasonSwitch;
+
+    public GameObject groundMesh;
+    public GameObject[] backgroundPlanes;
+
+    public Material[] springMaterials;
+    public Material[] summerMaterials;
+    public Material[] autumnMaterials;
+    public Material[] winterMaterials;
+
+    public AudioSource[] backgroundMusicArray;
 
     // Intro mode
     public bool cameraIntroDone;
@@ -117,12 +126,13 @@ public class GameplayLoop : MonoBehaviour
     void KillPlayer()
     {
         playerDied = true;
-        springBackgroundMusic.Stop();
         dieSound.Play();
-        currentSeasonId = -1;
 
         winText.text = "You didn't manage to save to three, shame on you.";
         restartButton.gameObject.SetActive(true);
+
+        backgroundMusicArray[currentSeasonId].Stop();
+        currentSeasonId = -1;
     }
 
     void StartNewGame()
@@ -131,6 +141,7 @@ public class GameplayLoop : MonoBehaviour
 
         winText.text = "";
         currentSeasonId = 0;
+        ChangeSeasonBackgrounds();
 
         seasonProgress = 0.0f;
         leafHealth = 100.0f;
@@ -141,8 +152,7 @@ public class GameplayLoop : MonoBehaviour
         sunProgressController.progress = (int)leafHealth;
         waterProgressController.progress = (int)rootHealth;
 
-        // start background music for Season 1: spring
-        springBackgroundMusic.Play();
+        backgroundMusicArray[0].Play();
     }
 
     public bool GameRunning()
@@ -154,21 +164,27 @@ public class GameplayLoop : MonoBehaviour
     {     
         winSound.Play();
 
-        //winText.text = "Season survived!\nWater left: " + (int)rootHealth + "\nSun left: " + (int)leafHealth;
-        restartButton.gameObject.SetActive(true);
-
         betweenSeasons = true;
-        StartNextSeason();
+
+        if(currentSeasonId == 3)
+        {
+            WinGame();
+        }
+        else 
+        {
+            StartNextSeason();
+        }
     }
 
     void StartNextSeason()
     {
-        Debug.Log("Next season started!");
-
         currentSeasonId += 1;
         seasonProgress = 0;
 
-        springBackgroundMusic.Stop();
+        ChangeSeasonMusic();
+        ChangeSeasonBackgrounds();
+
+        groundMesh.GetComponent<GroundController>().ChangeMaterial(currentSeasonId);
 
         leafHealth += healthIncreaseAtSeasonSwitch;
         rootHealth += healthIncreaseAtSeasonSwitch;
@@ -203,5 +219,49 @@ public class GameplayLoop : MonoBehaviour
     void UpdateSeasonClock()
     {
         seasonClockController.seasonProgress = seasonProgress;
+    }
+
+    void ChangeSeasonMusic()
+    {
+        backgroundMusicArray[currentSeasonId - 1].Stop();
+        backgroundMusicArray[currentSeasonId].Play();
+    }
+
+    void ChangeSeasonBackgrounds()
+    {
+        if (currentSeasonId == 0)
+        {
+            for (int i = 0; i < 7; ++i)
+            {
+                backgroundPlanes[i].GetComponent<MeshRenderer>().material = springMaterials[i];
+            }
+        }
+        if (currentSeasonId == 1)
+        {
+            for(int i=0;i<7;++i)
+            {
+                backgroundPlanes[i].GetComponent<MeshRenderer>().material = summerMaterials[i];
+            }
+        }
+        if (currentSeasonId == 2)
+        {
+            for (int i = 0; i < 7; ++i)
+            {
+                backgroundPlanes[i].GetComponent<MeshRenderer>().material = autumnMaterials[i];
+            }
+        }
+        if (currentSeasonId == 3)
+        {
+            for (int i = 0; i < 7; ++i)
+            {
+                backgroundPlanes[i].GetComponent<MeshRenderer>().material = winterMaterials[i];
+            }
+        }
+    }
+
+    void WinGame()
+    {
+        winText.text = "YOU ARE VICTORIOUS";
+        restartButton.gameObject.SetActive(true);
     }
 }
