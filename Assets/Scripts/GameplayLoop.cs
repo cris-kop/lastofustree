@@ -7,7 +7,10 @@ public class GameplayLoop : MonoBehaviour
 {
     //public Camera primaryCamera;
 
-    public Text winText;
+    public Image DieImage;
+    public Image WinImage;
+
+    //public Text winText;
     public SeasonClockController seasonClockController;
 
     public ProgressController sunProgressController;
@@ -156,7 +159,9 @@ public class GameplayLoop : MonoBehaviour
         playerDied = true;
         dieSound.Play();
 
-        winText.text = "You didn't manage to save to three, shame on you.";
+        DieImage.enabled = true;
+
+        //winText.text = "You didn't manage to save to three, shame on you.";
         restartButton.gameObject.SetActive(true);
 
         backgroundMusicArray[currentSeasonId].Stop();
@@ -167,7 +172,10 @@ public class GameplayLoop : MonoBehaviour
     {
         restartButton.gameObject.SetActive(false);
 
-        winText.text = "";
+        DieImage.enabled = false;
+        WinImage.enabled = false;
+
+        //winText.text = "";
         currentSeasonId = 0;
         ChangeSeasonBackgrounds();
 
@@ -289,7 +297,8 @@ public class GameplayLoop : MonoBehaviour
 
     void WinGame()
     {
-        winText.text = "YOU ARE VICTORIOUS";
+        //winText.text = "YOU ARE VICTORIOUS";
+        WinImage.enabled = true;
         restartButton.gameObject.SetActive(true);
     }
 }
