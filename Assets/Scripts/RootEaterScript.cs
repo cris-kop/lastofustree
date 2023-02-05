@@ -24,7 +24,7 @@ public class RootEaterScript : MonoBehaviour
                 timeDied = Time.time;
                 alive = false;
                 player.numberOfAliveThreatsUnderGround--;
-                GetComponent<MeshRenderer>().enabled = false;
+                GetComponent<SpriteRenderer>().enabled = false;
                 killSounds[GetRandomNumberKillSound()].Play();
             }
         }
@@ -47,7 +47,7 @@ public class RootEaterScript : MonoBehaviour
                 {
                     alive = true;
                     player.numberOfAliveThreatsUnderGround++;
-                    GetComponent<MeshRenderer>().enabled = true;
+                    GetComponent<SpriteRenderer>().enabled = true;
                 }
             }
             if (player.seasonPassed)
