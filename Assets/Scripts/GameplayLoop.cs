@@ -31,6 +31,9 @@ public class GameplayLoop : MonoBehaviour
     public float waterTreatSpeed;
 
     public AudioSource springBackgroundMusic;
+    public AudioSource winSound;
+    public AudioSource dieSound;
+
 
     // Start is called before the first frame update
     void Start()
@@ -62,6 +65,8 @@ public class GameplayLoop : MonoBehaviour
             else
             {
                 seasonPassed = true;
+                springBackgroundMusic.Stop();
+                winSound.Play();
             }
 
             // Sun and water health decreasing over time (unless player takes action)
@@ -71,7 +76,7 @@ public class GameplayLoop : MonoBehaviour
             }
             else
             {
-                playerDied = true;
+                PlayerDied();
             }
 
             if (waterHealth > 0.0f)
@@ -80,7 +85,7 @@ public class GameplayLoop : MonoBehaviour
             }
             else
             {
-                playerDied = true;
+                PlayerDied();
             }
         }
     }
@@ -109,7 +114,7 @@ public class GameplayLoop : MonoBehaviour
 
         if (playerDied)
         {
-            winText.text = "You killed the tree, shame on you.";
+            winText.text = "You didn't manage to save to three, shame on you.";
             restartButton.gameObject.SetActive(true);
         }
     }
@@ -138,5 +143,13 @@ public class GameplayLoop : MonoBehaviour
             }
             Mathf.Clamp(sunHealth, sunHealth, 100.0f);
         }
+    }
+
+    // run this when the player dies
+    void PlayerDied()
+    {
+        playerDied = true;
+        springBackgroundMusic.Stop();
+        dieSound.Play();
     }
 }
