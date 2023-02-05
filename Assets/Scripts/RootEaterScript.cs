@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class RootEaterScript : MonoBehaviour
 {
-    GameplayLoop player;
+    private GameplayLoop player;
 
-    private bool alive = true;
+    private bool enemyAlive = true;
     private float timeDied;
 
     public float respawnTimeSec;
@@ -16,17 +16,14 @@ public class RootEaterScript : MonoBehaviour
     // User clicked on the enemy
     void OnMouseDown()
     {
-        if (player.cameraIntroDone)
+        if (player.GameRunning() && enemyAlive)
         {
-            if (alive && !player.seasonPassed && !player.playerDied)
-            {
-                player.ProcessUndergroundEnemyClick();
-                timeDied = Time.time;
-                alive = false;
-                player.numberOfAliveThreatsUnderGround--;
-                GetComponent<SpriteRenderer>().enabled = false;
-                killSounds[GetRandomNumberKillSound()].Play();
-            }
+            player.ProcessUndergroundEnemyClick();
+            timeDied = Time.time;
+            enemyAlive = false;
+            player.numberOfAliveThreatsUnderGround--;
+            GetComponent<SpriteRenderer>().enabled = false;
+            killSounds[GetRandomNumberKillSound()].Play();
         }
     }
 
@@ -39,21 +36,18 @@ public class RootEaterScript : MonoBehaviour
     // update at fixed timestep
     void FixedUpdate()
     {
-        if (player.cameraIntroDone)
+        if(player.GameRunning() && !enemyAlive)
         {
-            if (!alive && !player.seasonPassed && !player.playerDied)
+            if (Time.time > timeDied + respawnTimeSec)
             {
-                if (Time.time > timeDied + respawnTimeSec)
-                {
-                    alive = true;
-                    player.numberOfAliveThreatsUnderGround++;
-                    GetComponent<SpriteRenderer>().enabled = true;
-                }
+                enemyAlive = true;
+                player.numberOfAliveThreatsUnderGround++;
+                GetComponent<SpriteRenderer>().enabled = true;
             }
-            if (player.seasonPassed)
-            {
-                gameObject.SetActive(false);
-            }
+        }
+        if (player.betweenSeasons)
+        {
+            gameObject.SetActive(false);
         }
     }
 

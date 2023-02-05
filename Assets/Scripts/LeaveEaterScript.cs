@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class LeaveEaterScript : MonoBehaviour
 {
-    GameplayLoop player;
+    private GameplayLoop player;
 
-    private bool alive = true;
+    private bool enemyAlive = true;
     private float timeDied;
 
     public float respawnTimeSec;
@@ -20,13 +20,9 @@ public class LeaveEaterScript : MonoBehaviour
     // User clicked on the enemy
     void OnMouseDown()
     {
-        if (player.cameraIntroDone)
-        {
-            Debug.Log("OnMouseDown for leave-eater!");
-            if (alive && !player.seasonPassed && !player.playerDied)
-            {
-                SetDeadState();
-            }
+        if(player.GameRunning() && enemyAlive)
+        { 
+            SetDeadState();
         }
     }
         
@@ -34,6 +30,7 @@ public class LeaveEaterScript : MonoBehaviour
     void Start()
     {
         player = GameObject.Find("Player").GetComponent<GameplayLoop>();
+
         randomChewySound = chewySounds[GetRandomNumberChewySound()];
         randomChewySound.Play();
 
@@ -43,24 +40,21 @@ public class LeaveEaterScript : MonoBehaviour
     // update at fixed timestep
     void FixedUpdate()
     {
-        if (player.cameraIntroDone)
-        {
-            if (!alive && !player.seasonPassed && !player.playerDied)
+        if(player.GameRunning() && !enemyAlive)
+        { 
+            if (Time.time > timeDied + respawnTimeSec)
             {
-                if (Time.time > timeDied + respawnTimeSec)
-                {
-                    Respawn();
-                }
+                Respawn();
             }
+        }
 
-            if (player.seasonPassed && alive)
-            {
-                SetDeadState();
-            }
-            if (player.playerDied && alive)
-            {
-                SetDeadState();
-            }
+        if (player.betweenSeasons && enemyAlive)
+        {
+            SetDeadState();
+        }
+        if (player.playerDied && enemyAlive)
+        {
+            SetDeadState();
         }
     }
 
@@ -84,10 +78,9 @@ public class LeaveEaterScript : MonoBehaviour
         randomKillSound.Play();
         randomKillSound = killSounds[GetRandomNumberKillSound()];
 
-        Debug.Log("Setdeadstate called on leaf eater!");
         player.ProcessAbovegroundEnemyClick();
         timeDied = Time.time;
-        alive = false;
+        enemyAlive = false;
         player.numberOfAliveThreatsAboveGround--;
         GetComponent<SpriteRenderer>().enabled = false;
     }
@@ -95,7 +88,7 @@ public class LeaveEaterScript : MonoBehaviour
     // Sets all properties when a leave eater respawns
     void Respawn()
     {
-        alive = true;
+        enemyAlive = true;
         player.numberOfAliveThreatsAboveGround++;
         GetComponent<SpriteRenderer>().enabled = true;
         randomChewySound = chewySounds[GetRandomNumberChewySound()];

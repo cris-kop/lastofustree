@@ -16,7 +16,6 @@ public class CameraController : MonoBehaviour
     // UGLY BUT WORKING
     private bool introPart1done = false;
     private bool introPart2done = false;
-    private bool introPart3done = false;
     private Vector3 camStartPos;
 
     GameplayLoop player;
